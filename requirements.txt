@@ -1,0 +1,7 @@
+pandas==2.2.2
+scikit-learn==1.5.1
+clickhouse-connect==0.7.4
+prometheus_client==0.20.0
+pytest==8.2.2
+python-dotenv==1.0.1
+requests

@@ -1,0 +1,36 @@
+# docker-compose.yml
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:23
+    container_name: clickhouse
+    environment:
+      - CLICKHOUSE_USER=pipeline
+      - CLICKHOUSE_PASSWORD=pipeline_pass
+      - CLICKHOUSE_DB=pipeline
+      - CLICKHOUSE_HTTP_PORT=8123
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--host=127.0.0.1", "--query", "SELECT 1"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+    volumes:
+      - ./clickhouse/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - clickhouse_data:/var/lib/clickhouse
+
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pipeline
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    volumes:
+      - ./data:/app/data
+    command: ["sleep", "infinity"]
+
+volumes:
+  clickhouse_data:
