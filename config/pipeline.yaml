@@ -1,0 +1,21 @@
+clickhouse:
+  host: localhost
+  port: 8123
+  username: default
+  password: ""
+  database: anomaly_demo
+
+window:
+  duration: "1h"
+  step: "5m"
+
+detectors:
+  - type: zscore
+    threshold: 3.0
+  - type: mad
+    threshold: 3.5
+
+sinks:
+  - type: stdout
+  - type: clickhouse
+    table: anomaly_reports

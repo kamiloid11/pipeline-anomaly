@@ -1,0 +1,7 @@
+pandas
+numpy
+pydantic
+pytest
+scikit-learn
+clickhouse-connect
+requests
